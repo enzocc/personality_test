@@ -1,0 +1,5 @@
+# exclude weather_app
+personality_test/*
+__pycache__/*
+.vscode/*
+
