@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="vie" id="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>What's your personality?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+</head>
+
+<body>
+    <section class="hero is-dark is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">What's your personality?</h1>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="columns">
+            <div class="column is-offset-one-quarter"><strong>(1) Extraversion</strong></div>
+            <div class="column"><strong>{{ results.extroversion }}</strong> average is <strong>{{ all_people.extroversion }}</strong></div>
+        </div>
+        <div class="columns">
+            <div class="column is-offset-one-quarter"><strong>(2) Agreeableness</strong></div>
+            <div class="column"><strong>{{ results.agreeableness }}</strong> average is <strong>{{ all_people.agreeableness }}</strong></div>
+        </div>
+        <div class="columns">
+            <div class="column is-offset-one-quarter"><strong>(3) Conscientiousness</strong></div>
+            <div class="column"><strong>{{ results.conscientiousness }}</strong> average is <strong>{{ all_people.conscientiousness }}</strong></div>
+        </div>
+        <div class="columns">
+            <div class="column is-offset-one-quarter"><strong>(4) Emotional Stability</strong></div>
+            <div class="column"><strong>{{ results.neuroticism }}</strong> average is <strong>{{ all_people.neuroticism }}</strong></div>
+        </div>
+        <div class="columns">
+            <div class="column is-offset-one-quarter"><strong>(5) Intellect/Imagination</strong></div>
+            <div class="column"><strong>{{ results.openness }}</strong> average is <strong>{{ all_people.openness }}</strong></div>
+        </div>
+    </section>
+
+    <body
