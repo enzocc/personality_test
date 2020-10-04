@@ -5,7 +5,7 @@ from flask import (
 )
 from flask_sqlalchemy import SQLAlchemy
 
-from calculations.personality_averages import calc_averages
+from calculations.personality_averages import calc_points
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/personality.db'
@@ -76,38 +76,48 @@ class Personality(db.Model):
 
     @property
     def total_e(self):
-        return (
-            self.e1 + self.e2 + self.e3 + self.e4 + self.e5 +
-            self.e6 + self.e7 + self.e8 + self.e9 + self.e10
-        )
+        e_ans = {
+            "e1": self.e1, "e2": self.e2, "e3": self.e3, "e4": self.e4,
+            "e5": self.e5, "e6": self.e6, "e7": self.e7, "e8": self.e8,
+            "e9": self.e9, "e10": self.e10
+        }
+        return calc_points(**e_ans)["extraversion"]
 
     @property
     def total_n(self):
-        return (
-            self.n1 + self.n2 + self.n3 + self.n4 + self.n5 +
-            self.n6 + self.n7 + self.n8 + self.n9 + self.n10
-        )
+        n_ans = {
+            "n1": self.n1, "n2": self.n2, "n3": self.n3, "n4": self.n4,
+            "n5": self.n5, "n6": self.n6, "n7": self.n7, "n8": self.n8,
+            "n9": self.n9, "n10": self.n10
+        }
+        return calc_points(**n_ans)["neuroticism"]
 
     @property
     def total_a(self):
-        return (
-            self.a1 + self.a2 + self.a3 + self.a4 + self.a5 +
-            self.a6 + self.a7 + self.a8 + self.a9 + self.a10
-        )
+        a_ans = {
+            "a1": self.a1, "a2": self.a2, "a3": self.a3, "a4": self.a4,
+            "a5": self.a5, "a6": self.a6, "a7": self.a7, "a8": self.a8,
+            "a9": self.a9, "a10": self.a10
+        }
+        return calc_points(**a_ans)["agreeableness"]
 
     @property
     def total_c(self):
-        return (
-            self.c1 + self.c2 + self.c3 + self.c4 + self.c5 +
-            self.c6 + self.c7 + self.c8 + self.c9 + self.c10
-        )
+        c_ans = {
+            "c1": self.c1, "c2": self.c2, "c3": self.c3, "c4": self.c4,
+            "c5": self.c5, "c6": self.c6, "c7": self.c7, "c8": self.c8,
+            "c9": self.c9, "c10": self.c10
+        }
+        return calc_points(**c_ans)["conscientiousness"]
 
     @property
     def total_o(self):
-        return (
-            self.o1 + self.o2 + self.o3 + self.o4 + self.o5 +
-            self.o6 + self.o7 + self.o8 + self.o9 + self.o10
-        )
+        o_ans = {
+            "o1": self.o1, "o2": self.o2, "o3": self.o3, "o4": self.o4,
+            "o5": self.o5, "o6": self.o6, "o7": self.o7, "o8": self.o8,
+            "o9": self.o9, "o10": self.o10
+        }
+        return calc_points(**o_ans)["openness"]
 
     def __repr__(self):
         return "Personanality(id={}, e={}, n={}, a={}, c={}, o={})".format(
@@ -133,9 +143,13 @@ class Personalities(object):
 
 @app.route('/', methods=["POST"])
 def index_post():
+    # Get values of the radio buttons from test.html
     ans = request.values
+    # Transform those values to integers
     int_ans = {k: int(ans[k]) for k in ans.keys()}
-    res = json.dumps(calc_averages(**int_ans))
+    # Calculate total points
+    res = json.dumps(calc_points(**int_ans))
+    # Send total points to results.html
     return redirect(url_for("results_get", results=res))
 
 

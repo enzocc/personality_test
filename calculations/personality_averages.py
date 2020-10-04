@@ -32,7 +32,7 @@ def conscientiousness(**kwargs):
     return [scores[c_questions[k]][kwargs[k]-1] for k in kwargs.keys()]
 
 
-def extroversion(**kwargs):
+def extraversion(**kwargs):
     return [scores[e_questions[k]][kwargs[k]-1] for k in kwargs.keys()]
 
 
@@ -44,16 +44,16 @@ def neuroticism(**kwargs):
     return [scores[n_questions[k]][kwargs[k]-1] for k in kwargs.keys()]
 
 
-def calc_averages(**kwargs):
+def calc_points(**kwargs):
     # openness
     dict_oo = {k: kwargs[k] for k in kwargs.keys() if k in o_questions}
     o_result = sum(openness(**dict_oo))
     # conscientiousness
     dict_cc = {k: kwargs[k] for k in kwargs.keys() if k in c_questions}
     c_result = sum(conscientiousness(**dict_cc))
-    # extroversion
+    # extraversion
     dict_ee = {k: kwargs[k] for k in kwargs.keys() if k in e_questions}
-    e_result = sum(extroversion(**dict_ee))
+    e_result = sum(extraversion(**dict_ee))
     # agreeableness
     dict_aa = {k: kwargs[k] for k in kwargs.keys() if k in a_questions}
     a_result = sum(agreeableness(**dict_aa))
@@ -64,7 +64,7 @@ def calc_averages(**kwargs):
     return {
         "openness": o_result,
         "conscientiousness": c_result,
-        "extroversion": e_result,
+        "extraversion": e_result,
         "agreeableness": a_result,
         "neuroticism": n_result,
     }
