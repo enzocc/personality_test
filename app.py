@@ -1,5 +1,6 @@
 import requests
 import json
+from scipy import stats
 from flask import (
     Flask, render_template, request, redirect, url_for, flash
 )
@@ -128,17 +129,11 @@ class Personality(db.Model):
 
 class Personalities(object):
     def __init__(self):
-        all_e = [p.total_e for p in Personality.query]
-        all_n = [p.total_n for p in Personality.query]
-        all_a = [p.total_a for p in Personality.query]
-        all_c = [p.total_c for p in Personality.query]
-        all_o = [p.total_o for p in Personality.query]
-
-        self.avr_e = sum(all_e)/len(all_e)
-        self.avr_n = sum(all_n)/len(all_n)
-        self.avr_a = sum(all_a)/len(all_a)
-        self.avr_c = sum(all_c)/len(all_c)
-        self.avr_o = sum(all_o)/len(all_o)
+        self.all_e = [p.total_e for p in Personality.query]
+        self.all_n = [p.total_n for p in Personality.query]
+        self.all_a = [p.total_a for p in Personality.query]
+        self.all_c = [p.total_c for p in Personality.query]
+        self.all_o = [p.total_o for p in Personality.query]
 
 
 @app.route('/', methods=["POST"])
@@ -161,15 +156,21 @@ def index_get():
 @app.route('/results')
 def results_get():
     results = json.loads(request.args['results'])
-    all_scores = {
-        "openness": round(ALL_PEOPLE.avr_o, 2),
-        "conscientiousness": round(ALL_PEOPLE.avr_c, 2),
-        "extroversion": round(ALL_PEOPLE.avr_e, 2),
-        "agreeableness": round(ALL_PEOPLE.avr_a, 2),
-        "neuroticism": round(ALL_PEOPLE.avr_n, 2),
+    p_o = stats.percentileofscore(ALL_PEOPLE.all_o, results["openness"])
+    p_c = stats.percentileofscore(ALL_PEOPLE.all_c, results["conscientiousness"])   # noqa
+    p_e = stats.percentileofscore(ALL_PEOPLE.all_e, results["extraversion"])
+    p_a = stats.percentileofscore(ALL_PEOPLE.all_a, results["agreeableness"])
+    p_n = stats.percentileofscore(ALL_PEOPLE.all_n, results["neuroticism"])
+
+    percentile = {
+        "openness": round(p_o, 2),
+        "conscientiousness": round(p_c, 2),
+        "extraversion": round(p_e, 2),
+        "agreeableness": round(p_a, 2),
+        "neuroticism": round(p_n, 2),
     }
     return render_template(
-        "results.html", results=results, all_people=all_scores
+        "results.html", results=results, percentile=percentile
     )
 
 
